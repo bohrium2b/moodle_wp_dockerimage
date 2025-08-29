@@ -16,7 +16,6 @@ RUN apt-get update && apt-get install -y \
     libxslt1-dev \
     libmagickwand-dev \
     libexif-dev \
-    libsoap-ys-dev \
     libxmlrpc-epi-dev \
     unzip \
     wget \
