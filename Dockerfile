@@ -30,27 +30,33 @@ RUN apt-get update && apt-get install -y \
     texlive-fonts-recommended \
     texlive-fonts-extra \
     texlive-science \
-    dvipng \
-    && docker-php-ext-install \
-    ctype \
-    curl \
-    dom \
-    gd \
-    iconv \
-    intl \
-    json \
-    mbstring \
-    pcre \
-    simplexml \
-    spl \
-    xml \
-    zip \
-    openssl \
-    soap \
-    sodium \
-    tokenizer \
-    xmlrpc \
-    && rm -rf /var/lib/apt/lists/*
+    dvipng 
+
+# Install build tools and ensure dependencies for PHP extensions are installed
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    autoconf \
+    libtool \
+    pkg-config \
+    && apt-get clean
+
+
+RUN docker-php-source extract
+
+# Ensure the required PHP extension source code is available
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
+
+RUN docker-php-ext-install ctype
+RUN docker-php-ext-install curl
+RUN docker-php-ext-install dom
+RUN docker-php-ext-install gd
+RUN docker-php-ext-install iconv
+RUN docker-php-ext-install intl
+RUN docker-php-ext-install xml
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install soap
+RUN docker-php-ext-install sodium
+RUN rm -rf /var/lib/apt/lists/*
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
@@ -65,16 +71,19 @@ RUN wget -O /tmp/wordpress.zip $WORDPRESS_URL \
     && mv /tmp/wordpress/* /var/www/html/ \
     && rm -rf /tmp/wordpress
 
-# Download and Install Moodle at /elearn
-ENV MOODLE_VERSION latest
-ENV MOODLE_URL https://download.moodle.org/latest.zip
 
 RUN mkdir -p /var/www/html/elearn \
-    && wget -O /tmp/moodle.zip $MOODLE_URL \
-    && unzip /tmp/moodle.zip -d /tmp \
-    && rm /tmp/moodle.zip \
+    && cd /tmp \
+    && git clone -b MOODLE_500_STABLE https://github.com/moodle/moodle.git moodle \
     && mv /tmp/moodle/* /var/www/html/elearn/ \
     && rm -rf /tmp/moodle
+# Set Moodle data directory
+RUN mkdir -p /var/www/moodledata \
+    && chown -R www-data:www-data /var/www/moodledata \
+    && chmod -R 770 /var/www/moodledata
+# Note: You may want to change the Moodle data directory path as needed
+
+
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html \
@@ -97,6 +106,8 @@ RUN echo '<VirtualHost *:80>\n\
         Require all granted\n\
     </Directory>\n\
 </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
+
+
 
 # Define volumes for persistence
 VOLUME ["/var/www/html/wp-content/plugins", "/var/www/html/wp-content/themes"]

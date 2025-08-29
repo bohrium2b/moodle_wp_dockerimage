@@ -17,9 +17,6 @@ services:
       - moodle-local:/var/www/html/elearn/local
       - moodle-blocks:/var/www/html/elearn/blocks
       - moodle-data:/var/www/html/elearn/data
-    environment:
-      # Set recommended PHP env vars here if needed
-      # Example: PHP_MEMORY_LIMIT: 512M
     depends_on:
       - db
 
