@@ -56,6 +56,7 @@ RUN docker-php-ext-install xml
 RUN docker-php-ext-install zip
 RUN docker-php-ext-install soap
 RUN docker-php-ext-install sodium
+RUN docker-php-ext-install mysqli
 RUN rm -rf /var/lib/apt/lists/*
 
 # Enable Apache mod_rewrite
