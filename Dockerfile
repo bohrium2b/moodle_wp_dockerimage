@@ -21,6 +21,17 @@ RUN apt-get update && apt-get install -y \
     unzip \
     wget \
     git \
+    # Dependencies for Maxima and STACK
+    maxima \
+    maxima-share \
+    sbcl \
+    gnuplot \
+    texlive \
+    texlive-latex-extra \
+    texlive-fonts-recommended \
+    texlive-fonts-extra \
+    texlive-science \
+    dvipng \
     && docker-php-ext-install \
     ctype \
     curl \
