@@ -23,11 +23,6 @@ RUN apt-get update && apt-get install -y \
     # Dependencies for Maxima and STACK
     sbcl \
     gnuplot \
-    texlive \
-    texlive-latex-extra \
-    texlive-fonts-recommended \
-    texlive-fonts-extra \
-    texlive-science \
     dvipng 
 
 # Install build tools and ensure dependencies for PHP extensions are installed
