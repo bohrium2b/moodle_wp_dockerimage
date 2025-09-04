@@ -105,7 +105,7 @@ RUN echo '<VirtualHost *:80>\n\
 # Build Maxima from source for SBCL
 ENV MAXIMA_VERSION=5.47.0
 RUN cd /tmp \
-    && wget https://sourceforge.net/projects/maxima/files/Maxima-source/${MAXIMA_VERSION}/maxima-${MAXIMA_VERSION}.tar.gz \
+    && wget https://sourceforge.net/projects/maxima/files/Maxima-source/${MAXIMA_VERSION}-source/maxima-${MAXIMA_VERSION}.tar.gz \
     && tar xvf maxima-${MAXIMA_VERSION}.tar.gz \
     && cd maxima-${MAXIMA_VERSION} \
     && ./configure --with-sbcl --prefix=/usr \
