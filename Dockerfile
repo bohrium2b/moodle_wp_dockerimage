@@ -21,8 +21,6 @@ RUN apt-get update && apt-get install -y \
     wget \
     git \
     # Dependencies for Maxima and STACK
-    maxima \
-    maxima-share \
     sbcl \
     gnuplot \
     texlive \
@@ -108,7 +106,17 @@ RUN echo '<VirtualHost *:80>\n\
     </Directory>\n\
 </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
-
+# Build Maxima
+# Build Maxima from source for SBCL
+ENV MAXIMA_VERSION=5.47.0
+RUN cd /tmp \
+    && wget https://sourceforge.net/projects/maxima/files/Maxima-source/${MAXIMA_VERSION}/maxima-${MAXIMA_VERSION}.tar.gz \
+    && tar xvf maxima-${MAXIMA_VERSION}.tar.gz \
+    && cd maxima-${MAXIMA_VERSION} \
+    && ./configure --with-sbcl --prefix=/usr \
+    && make \
+    && make install \
+    && cd / && rm -rf /tmp/maxima-${MAXIMA_VERSION} /tmp/maxima-${MAXIMA_VERSION}.tar.gz
 
 # Define volumes for persistence
 VOLUME ["/var/www/html/wp-content/plugins", "/var/www/html/wp-content/themes"]
