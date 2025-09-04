@@ -102,6 +102,7 @@ RUN echo '<VirtualHost *:80>\n\
 </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
 # Build Maxima
+RUN apt-get install makeinfo
 # Build Maxima from source for SBCL
 ENV MAXIMA_VERSION=5.47.0
 RUN cd /tmp \
