@@ -113,6 +113,17 @@ RUN cd /tmp \
     && make install \
     && cd / && rm -rf /tmp/maxima-${MAXIMA_VERSION} /tmp/maxima-${MAXIMA_VERSION}.tar.gz
 
+
+# Setup Moodle Cron
+RUN apt-get update && apt-get install -y cron && apt-get clean
+# Add Moodle cron job
+RUN echo "* * * * * www-data /usr/bin/php /var/www/html/elearn/admin/cli/cron.php >/dev/null 2>&1" > /etc/cron.d/moodle-cron \
+    && chmod 0644 /etc/cron.d/moodle-cron \
+    && crontab -u www-data /etc/cron.d/moodle-cron
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
 # Define volumes for persistence
 VOLUME ["/var/www/html/wp-content/plugins", "/var/www/html/wp-content/themes"]
 VOLUME ["/var/www/html/elearn/theme", "/var/www/html/elearn/mod", "/var/www/html/elearn/repository", "/var/www/html/elearn/local", "/var/www/html/elearn/blocks", "/var/www/html/elearn/data"]
