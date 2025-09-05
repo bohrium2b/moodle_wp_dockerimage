@@ -117,9 +117,9 @@ RUN cd /tmp \
 # Setup Moodle Cron
 RUN apt-get update && apt-get install -y cron && apt-get clean
 # Add Moodle cron job
-RUN echo "* * * * * www-data /usr/bin/php /var/www/html/elearn/admin/cli/cron.php" > /etc/cron.d/moodle-cron \
-    && chmod 0644 /etc/cron.d/moodle-cron \
-    && crontab -u www-data /etc/cron.d/moodle-cron
+RUN echo "* * * * * www-data /usr/bin/php /var/www/html/elearn/admin/cli/cron.php" > /etc/crontab \
+    && chmod 0644 /etc/crontab \
+    && crontab -u www-data /etc/crontab
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
