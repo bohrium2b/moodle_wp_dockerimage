@@ -118,8 +118,8 @@ RUN cd /tmp \
 RUN apt-get update && apt-get install -y cron && apt-get clean
 # Add Moodle cron job
 # Add Moodle cron job with trailing newline for cron to pick it up
-RUN echo '* * * * * root /usr/bin/php /var/www/html/elearn/admin/cli/cron.php >> /var/log/moodle.log 2>&1\n' > /etc/cron.d/moodle-cron \
-    && chmod 0644 /etc/cron.d/moodle-cron
+RUN echo '* * * * * root /bin/echo "MOODLE CRON RUNNING" >> /var/log/moodle.log && /usr/local/bin/php /var/www/html/elearn/admin/cli/cron.php >> /var/log/moodle.log 2>&1\n' > /etc/cron.d/moodle \
+    && chmod 0644 /etc/cron.d/moodle
 RUN echo '* * * * * root /bin/echo "MOODLE CRON heartbeat" >> /var/log/moodle.log 2>&1\n' > /etc/cron.d/heartbeat \ 
     && chmod 0644 /etc/cron.d/heartbeat
 COPY entrypoint.sh /entrypoint.sh
